@@ -13,14 +13,14 @@ renderer.setSize((2 * window.innerWidth) / 3, (7 * window.innerHeight) / 8);
 document.getElementById('app').appendChild(renderer.domElement);
 
 // Lights
-const ambientLight = new THREE.AmbientLight(0xf2e0cf, 0.5);
-const directionalLight = new THREE.DirectionalLight(0xf2e0cf, 1);
-directionalLight.position.set(10, 0, 0);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const directionalLight = new THREE.DirectionalLight(0xf2e0cf, 10);
+directionalLight.position.set(100, 0, 0);
 scene.add(ambientLight, directionalLight);
 
 // Group for tetrahedra
 const stellatedOctahedron = createStellatedOctahedron();
-stellatedOctahedron.position.set(5, 10, -15);
+stellatedOctahedron.position.set(8, 20, -20);
 scene.add(stellatedOctahedron);
 
 // Group for octahedra compound
@@ -30,8 +30,37 @@ scene.add(octahedronCompound);
 
 // Group for cube and octahedron compound
 const cubeOctahedronCompound = createCubeOctahedronCompound();
-cubeOctahedronCompound.position.set(0, 0, 0);
+cubeOctahedronCompound.position.set(-18, 24, -30);
 scene.add(cubeOctahedronCompound);
+
+const stellatedOctahedron2 = createStellatedOctahedron();
+stellatedOctahedron2.position.set(-40, -65, -90);
+scene.add(stellatedOctahedron2);
+
+// Group for cube
+const cube = createCube();
+cube.position.set(-3, 80, -100);
+scene.add(cube);
+
+const cube2 = createCube();
+cube2.position.set(-10, -100, -130);
+scene.add(cube2);
+
+const cube3 = createCube();
+cube3.position.set(90, 100, -160);
+scene.add(cube3);
+
+const icosahedron = createIcosahedron();
+icosahedron.position.set(-7, 22, -30);
+scene.add(icosahedron);
+
+const icosahedron2 = createIcosahedron();
+icosahedron2.position.set(-30, -10, -60);
+scene.add(icosahedron2);
+
+const dodecahedron = createDodecahedron();
+dodecahedron.position.set(3, -22, -25);
+scene.add(dodecahedron);
 
 // Camera position
 camera.position.z = 15;
@@ -39,15 +68,37 @@ camera.position.z = 15;
 // Animation
 function animate() {
   requestAnimationFrame(animate);
+  const movementSpeed = 0.01;
 
-  stellatedOctahedron.rotation.x += 0.001;
-  stellatedOctahedron.rotation.y += 0.001;
+  stellatedOctahedron.rotation.x += movementSpeed;
+  stellatedOctahedron.rotation.y += movementSpeed;
 
-  octahedronCompound.rotation.x += 0.001;
-  octahedronCompound.rotation.y += 0.001;
+  octahedronCompound.rotation.x += movementSpeed;
+  octahedronCompound.rotation.y += movementSpeed;
 
-  cubeOctahedronCompound.rotation.x += 0.001;
-  cubeOctahedronCompound.rotation.y += 0.001;
+  cubeOctahedronCompound.rotation.x += movementSpeed;
+  cubeOctahedronCompound.rotation.y += movementSpeed;
+
+  stellatedOctahedron2.rotation.x += movementSpeed;
+  stellatedOctahedron2.rotation.y += movementSpeed;
+
+  cube.rotation.x += movementSpeed;
+  cube.rotation.y += movementSpeed;
+
+  cube2.rotation.x += movementSpeed;
+  cube2.rotation.y += movementSpeed;
+
+  cube3.rotation.x += movementSpeed;
+  cube3.rotation.y += movementSpeed;
+
+  icosahedron.rotation.x += movementSpeed;
+  icosahedron.rotation.y += movementSpeed;
+
+  icosahedron2.rotation.x += movementSpeed;
+  icosahedron2.rotation.y += movementSpeed;
+
+  dodecahedron.rotation.x += movementSpeed;
+  dodecahedron.rotation.y += movementSpeed;
 
   renderer.render(scene, camera);
 }
@@ -103,4 +154,44 @@ function createCubeOctahedronCompound() {
   group.add(cube, octahedron);
 
   return group;
+}
+
+function createCube() {
+  const cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const cube = new THREE.Mesh(cubeGeometry, material);
+
+  return cube;
+}
+
+function createOctahedron() {
+  const octahedronGeometry = new THREE.OctahedronGeometry(5);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const octahedron = new THREE.Mesh(octahedronGeometry, material);
+
+  return octahedron;
+}
+
+function createTetrahedron() {
+  const tetrahedronGeometry = new THREE.TetrahedronGeometry(5);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const tetrahedron = new THREE.Mesh(tetrahedronGeometry, material);
+
+  return tetrahedron;
+}
+
+function createIcosahedron() {
+  const icosahedronGeometry = new THREE.IcosahedronGeometry(3);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const icosahedron = new THREE.Mesh(icosahedronGeometry, material);
+
+  return icosahedron;
+}
+
+function createDodecahedron() {
+  const dodecahedronGeometry = new THREE.DodecahedronGeometry(3);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const dodecahedron = new THREE.Mesh(dodecahedronGeometry, material);
+
+  return dodecahedron;
 }
