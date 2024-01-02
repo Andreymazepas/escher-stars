@@ -1,49 +1,114 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // Create scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
-  (2 * window.innerWidth) / 3 / ((7 * window.innerHeight) / 8),
+  (window.innerHeight * 0.8 * 0.82) / (window.innerHeight * 0.8),
   0.1,
   1000
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize((2 * window.innerWidth) / 3, (7 * window.innerHeight) / 8);
+renderer.setSize(window.innerHeight * 0.8 * 0.82, window.innerHeight * 0.8);
 document.getElementById('app').appendChild(renderer.domElement);
+const mouse = new THREE.Vector2();
+window.addEventListener('mousemove', (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+});
+// import glb
+const loader = new GLTFLoader();
+let octa3GLB;
+loader.load('/octa3.glb', function (gltf) {
+  octa3GLB = gltf.scene;
+  const scaleFactor = 13;
+  octa3GLB.traverse((o) => {
+    if (o.isMesh) {
+      console.log(o);
+      o.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    }
+  });
+
+  // octa3GLB.rotation.z = Math.PI / 2;
+  // octa3GLB.rotation.y = Math.PI / 2 - 0.1;
+  // octa3GLB.rotation.x = 0;
+  octa3GLB.position.set(0, 0, -10);
+
+  scene.add(octa3GLB);
+});
+
+let cube2GLB;
+loader.load('/cube2.glb', function (gltf) {
+  cube2GLB = gltf.scene;
+  const scaleFactor = 1;
+  cube2GLB.traverse((o) => {
+    if (o.isMesh) {
+      console.log(o);
+      o.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    }
+  });
+
+  cube2GLB.rotation.y = 0.2;
+  // cube2GLB.rotation.x = 0;
+  cube2GLB.position.set(-3.5, -9, 0);
+
+  scene.add(cube2GLB);
+});
+
+let tetra2GLB;
+loader.load('/tetra2.glb', function (gltf) {
+  tetra2GLB = gltf.scene;
+  const scaleFactor = 5;
+  tetra2GLB.traverse((o) => {
+    if (o.isMesh) {
+      console.log(o);
+      o.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    }
+  });
+
+  tetra2GLB.rotation.y = 0.2;
+  // tetra2GLB.rotation.x = 0;
+  tetra2GLB.position.set(8, 20, -20);
+
+  scene.add(tetra2GLB);
+});
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 const directionalLight = new THREE.DirectionalLight(0xf2e0cf, 10);
-directionalLight.position.set(100, 0, 0);
+directionalLight.position.set(100, 100, 0);
 scene.add(ambientLight, directionalLight);
 
 // Group for tetrahedra
 const stellatedOctahedron = createStellatedOctahedron();
 stellatedOctahedron.position.set(8, 20, -20);
-scene.add(stellatedOctahedron);
+//scene.add(stellatedOctahedron);
 
 // Group for octahedra compound
 const octahedronCompound = createOctahedronCompound();
-octahedronCompound.position.set(8, -10, -20);
+octahedronCompound.position.set(18, -22, -35);
 scene.add(octahedronCompound);
 
 // Group for cube and octahedron compound
 const cubeOctahedronCompound = createCubeOctahedronCompound();
-cubeOctahedronCompound.position.set(-18, 24, -30);
+cubeOctahedronCompound.rotation.x = 0.5;
+cubeOctahedronCompound.rotation.y = -0.2;
+cubeOctahedronCompound.rotation.z = -0.05;
+cubeOctahedronCompound.position.set(-22, 28, -35);
 scene.add(cubeOctahedronCompound);
 
 const stellatedOctahedron2 = createStellatedOctahedron();
-stellatedOctahedron2.position.set(-40, -65, -90);
+stellatedOctahedron2.position.set(-63, -85, -120);
 scene.add(stellatedOctahedron2);
 
 // Group for cube
 const cube = createCube();
-cube.position.set(-3, 80, -100);
+cube.position.set(-15, 81, -100);
 scene.add(cube);
 
 const cube2 = createCube();
-cube2.position.set(-10, -100, -130);
+cube2.position.set(-9, -102, -130);
 scene.add(cube2);
 
 const cube3 = createCube();
@@ -51,15 +116,16 @@ cube3.position.set(90, 100, -160);
 scene.add(cube3);
 
 const icosahedron = createIcosahedron();
-icosahedron.position.set(-7, 22, -30);
+icosahedron.rotation.y = 0.5;
+icosahedron.position.set(-11, 27, -35);
 scene.add(icosahedron);
 
 const icosahedron2 = createIcosahedron();
-icosahedron2.position.set(-30, -10, -60);
+icosahedron2.position.set(-43, -10, -70);
 scene.add(icosahedron2);
 
 const dodecahedron = createDodecahedron();
-dodecahedron.position.set(3, -22, -25);
+dodecahedron.position.set(14, -33, -35);
 scene.add(dodecahedron);
 
 // Camera position
@@ -68,7 +134,7 @@ camera.position.z = 15;
 // Animation
 function animate() {
   requestAnimationFrame(animate);
-  const movementSpeed = 0.01;
+  const movementSpeed = 0.0;
 
   stellatedOctahedron.rotation.x += movementSpeed;
   stellatedOctahedron.rotation.y += movementSpeed;
@@ -99,6 +165,12 @@ function animate() {
 
   dodecahedron.rotation.x += movementSpeed;
   dodecahedron.rotation.y += movementSpeed;
+
+  // camera slight offset mouse position
+  const mouseOffsetX = 0.5;
+  const mouseOffsetY = 0.5;
+  camera.position.x = mouse.x * mouseOffsetX;
+  camera.position.y = mouse.y * mouseOffsetY;
 
   renderer.render(scene, camera);
 }
