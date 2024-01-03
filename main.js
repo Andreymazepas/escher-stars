@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Create scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  75,
+  50,
   (window.innerHeight * 0.8 * 0.82) / (window.innerHeight * 0.8),
   0.1,
   1000
@@ -22,10 +22,9 @@ const loader = new GLTFLoader();
 let octa3GLB;
 loader.load('/octa3.glb', function (gltf) {
   octa3GLB = gltf.scene;
-  const scaleFactor = 13;
+  const scaleFactor = 5;
   octa3GLB.traverse((o) => {
     if (o.isMesh) {
-      console.log(o);
       o.scale.set(scaleFactor, scaleFactor, scaleFactor);
     }
   });
@@ -33,9 +32,9 @@ loader.load('/octa3.glb', function (gltf) {
   // octa3GLB.rotation.z = Math.PI / 2;
   // octa3GLB.rotation.y = Math.PI / 2 - 0.1;
   // octa3GLB.rotation.x = 0;
-  octa3GLB.position.set(0, 0, -10);
+  octa3GLB.position.set(0, 0, 0);
 
-  scene.add(octa3GLB);
+  //scene.add(octa3GLB);
 });
 
 let cube2GLB;
@@ -44,14 +43,18 @@ loader.load('/cube2.glb', function (gltf) {
   const scaleFactor = 1;
   cube2GLB.traverse((o) => {
     if (o.isMesh) {
-      console.log(o);
+      o.material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.5,
+        roughness: 0.5,
+      });
       o.scale.set(scaleFactor, scaleFactor, scaleFactor);
     }
   });
 
-  cube2GLB.rotation.y = 0.2;
+  //cube2GLB.rotation.y = 0.2;
   // cube2GLB.rotation.x = 0;
-  cube2GLB.position.set(-3.5, -9, 0);
+  cube2GLB.position.set(-2.5, -7.5, -5);
 
   scene.add(cube2GLB);
 });
@@ -59,23 +62,27 @@ loader.load('/cube2.glb', function (gltf) {
 let tetra2GLB;
 loader.load('/tetra2.glb', function (gltf) {
   tetra2GLB = gltf.scene;
-  const scaleFactor = 5;
+  const scaleFactor = 3;
   tetra2GLB.traverse((o) => {
     if (o.isMesh) {
-      console.log(o);
+      o.material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.5,
+        roughness: 0.5,
+      });
       o.scale.set(scaleFactor, scaleFactor, scaleFactor);
     }
   });
 
-  tetra2GLB.rotation.y = 0.2;
+  tetra2GLB.rotation.y = 0.4;
   // tetra2GLB.rotation.x = 0;
-  tetra2GLB.position.set(8, 20, -20);
+  tetra2GLB.position.set(4, 11, -15);
 
   scene.add(tetra2GLB);
 });
 
 // Lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
 const directionalLight = new THREE.DirectionalLight(0xf2e0cf, 10);
 directionalLight.position.set(100, 100, 0);
 scene.add(ambientLight, directionalLight);
@@ -87,7 +94,7 @@ stellatedOctahedron.position.set(8, 20, -20);
 
 // Group for octahedra compound
 const octahedronCompound = createOctahedronCompound();
-octahedronCompound.position.set(18, -22, -35);
+octahedronCompound.position.set(17, -20, -60);
 scene.add(octahedronCompound);
 
 // Group for cube and octahedron compound
@@ -95,7 +102,7 @@ const cubeOctahedronCompound = createCubeOctahedronCompound();
 cubeOctahedronCompound.rotation.x = 0.5;
 cubeOctahedronCompound.rotation.y = -0.2;
 cubeOctahedronCompound.rotation.z = -0.05;
-cubeOctahedronCompound.position.set(-22, 28, -35);
+cubeOctahedronCompound.position.set(-20, 25, -60);
 scene.add(cubeOctahedronCompound);
 
 const stellatedOctahedron2 = createStellatedOctahedron();
@@ -104,7 +111,8 @@ scene.add(stellatedOctahedron2);
 
 // Group for cube
 const cube = createCube();
-cube.position.set(-15, 81, -100);
+cube.rotation.set(0.5, 0.5, 0);
+cube.position.set(-11, 58, -120);
 scene.add(cube);
 
 const cube2 = createCube();
@@ -116,8 +124,8 @@ cube3.position.set(90, 100, -160);
 scene.add(cube3);
 
 const icosahedron = createIcosahedron();
-icosahedron.rotation.y = 0.5;
-icosahedron.position.set(-11, 27, -35);
+icosahedron.rotation.x = -0.5;
+icosahedron.position.set(-10, 25, -60);
 scene.add(icosahedron);
 
 const icosahedron2 = createIcosahedron();
@@ -167,10 +175,10 @@ function animate() {
   dodecahedron.rotation.y += movementSpeed;
 
   // camera slight offset mouse position
-  const mouseOffsetX = 0.5;
-  const mouseOffsetY = 0.5;
-  camera.position.x = mouse.x * mouseOffsetX;
-  camera.position.y = mouse.y * mouseOffsetY;
+  // const mouseOffsetX = 0.5;
+  // const mouseOffsetY = 0.5;
+  // camera.position.x = mouse.x * mouseOffsetX;
+  // camera.position.y = mouse.y * mouseOffsetY;
 
   renderer.render(scene, camera);
 }
